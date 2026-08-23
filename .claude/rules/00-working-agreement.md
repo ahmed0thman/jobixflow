@@ -14,7 +14,7 @@ The handover transcript contains a long technical argument (Blade vs. React, nat
 
 1. Client written requirements — `docs/sources/2026-08-05-client-major-changes/`
 2. Meeting transcript — `docs/sources/2026-08-05-developer-handover/`
-3. Screenshots — `figma-current/`, **visual evidence only**
+3. Screenshots — originally `figma-current/`, now **removed from the repo**; the distilled palette/component summary in `CLAUDE.md` § Design system is what survives of it. Treat that summary the same way the screenshots were treated: **visual evidence only**
 
 Higher beats lower. A conflict is never resolved silently: record both readings and open a `Q-nn` entry in [`../docs/open-questions.md`](../docs/open-questions.md).
 
@@ -40,7 +40,7 @@ Source depth is genuinely uneven. The client's financial text is specification-g
 
 ## R00-5 · Never assert build coverage
 
-`figma-current/` holds nine sample screens supplied to infer the design system. It says nothing about what exists in the product.
+`figma-current/` held nine sample screens supplied to infer the design system, and has since been deleted from the repo. Neither it nor the summary that survives of it in `CLAUDE.md` says anything about what exists in the product.
 
 No document may state that a screen exists, is missing, is incomplete, or was already built. Screen inventories are derived **forward** from business requirements. Current coverage is marked *unverified* until the designer confirms it against the real Figma file or the live dashboards.
 

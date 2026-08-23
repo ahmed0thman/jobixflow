@@ -17,7 +17,7 @@ When two sources disagree, the higher entry wins and the disagreement is logged 
 | ≤ 2026-08-05 | [`2026-08-05-client-major-changes/`](2026-08-05-client-major-changes/) | `[C:§…]` | Highest | Twilio masked calls & SMS; the complete financial system |
 | 2026-08-17 | [`2026-08-17-client-followup/`](2026-08-17-client-followup/) | `[T2:<line>]` | High — direct client meeting | Resolves most of `open-questions.md`: wallet definition, audit log scope, delete/archive, job state machine, priority, Twilio number lifecycle, gateways, refunds vs. disputes, expenses, invoicing |
 | 2026-08-05 | [`2026-08-05-developer-handover/`](2026-08-05-developer-handover/) | `[T:<line>]` | Medium | Current system behavior, all four dashboards, job lifecycle, roles |
-| — | `../../../figma-current/` (in place) | `[FIG:<screen>]` | Visual only | Design system: palette, components, layout patterns |
+| — | `../../../figma-current/` (**removed from repo** — see Critical limitation below) | `[FIG:<screen>]` | Visual only | Design system: palette, components, layout patterns (surviving summary: `CLAUDE.md` § Design system) |
 
 Each folder carries a `NOTES.md` with a section map and reliability caveats. **Read the NOTES before the source.**
 
@@ -27,7 +27,7 @@ Each folder carries a `NOTES.md` with a section map and reliability caveats. **R
 
 ## Critical limitation
 
-`figma-current/` contains **nine sample screens**, supplied to infer the visual design system. It is **not** an inventory of the current build and carries no information about what does or does not exist. No document in this workspace may claim a screen exists, is missing, or is incomplete on the basis of these files. Screen inventories are derived forward from business requirements, with current coverage marked unverified until confirmed against the real Figma file or the live dashboards.
+`figma-current/` contained **nine sample screens**, supplied to infer the visual design system, and has since been **deleted from the repo**. It was never an inventory of the current build and carried no information about what does or does not exist — that limitation outlives the folder itself: no document in this workspace may claim a screen exists, is missing, or is incomplete on the basis of these now-gone files, nor on the basis of the distilled summary that survives in `CLAUDE.md`. Screen inventories are derived forward from business requirements, with current coverage marked unverified until confirmed against the real Figma file or the live dashboards. Any `[FIG:<screen>]` citation already made in a BRD or design plan refers to a screenshot that is no longer in this repo and can only be re-verified against the live Figma file, not against a local copy.
 
 ## Adding a new source
 

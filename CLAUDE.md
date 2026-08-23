@@ -17,13 +17,12 @@ Deliverables are documents and prompts, not code:
 | `design-prompts/` | Master prompts fed to Figma / Gemini to generate the actual UI |
 | `client/features/` | Raw client requirements (input, do not rewrite) |
 | `recorded_meetings/<date>/` | Meeting transcripts, audio, video (input, do not rewrite) |
-| `figma-current/` | Screenshots of the existing Figma design (design-system reference) |
 
 ## Source material and its precedence
 
 1. **`client/features/major-changes.txt`** — the client's own written requirements (Arabic). This is the **highest-authority** statement of what to build. Covers the Twilio masked-calling system and the full financial system.
 2. **`recorded_meetings/2026-08-05 17_17/transcript.txt`** — 600 lines of colloquial Egyptian Arabic, auto-transcribed and noisy. This is the only explanation of **how the existing system works today**. Speaker labels are absent; the developer describes screens, the designer asks probing questions.
-3. **`figma-current/*.png`** — the existing Figma screens. Source of truth for the **visual design system**.
+3. **The "Design system" section below** — distilled from nine screenshots of the existing Figma file that were originally kept in a `figma-current/` folder. That folder has since been **removed from the repo**; the section below is what survives of it and remains the source of truth for the **visual design system** until re-confirmed against the live Figma file.
 
 Sources are Arabic; deliverables should be **English** unless the user asks otherwise. The transcript is lossy — never quote it as precise spec; treat contradictions as open questions rather than resolving them silently.
 
@@ -74,6 +73,8 @@ Chat is **per job**. Allowed pairs: technician ↔ company dispatcher; company d
 Records CRUD actions across the platform and companies — but **not unconditionally every company action** (confirmed 2026-08-17, see `Q-06`): it certifies operations conducted through the platform's own infrastructure, and excludes anything a company does entirely on its own payment gateway and its own Twilio number, out of respect for that company's independent standing. Today it is missing a **company** column and a **user-type** column, and offers only one global search box. It will reach millions of rows, so it needs dedicated per-column filtering plus date ranges — this was the concrete example the designer used to justify the reusable filter component.
 
 ## The new requirements
+
+The summary below is a quick-reference snapshot. For a fully-cited trace of every new requirement — with source tags, rule IDs, and open-question status per item — see [`.claude/docs/NEW-REQUIREMENTS.md`](.claude/docs/NEW-REQUIREMENTS.md). Any task that only needs the new requirements can read that file alone, without pulling in the rest of this file.
 
 ### 1. Multi-tenancy — companies get their own book of business
 
@@ -131,7 +132,7 @@ The existing Reports page is charts only. The client wants **tables with full se
 
 The platform sends a payment link to the customer's mobile. **This has never had a UI** and must be designed.
 
-## Design system (inferred from `figma-current/`)
+## Design system (inferred from the original Figma screenshots, since removed from this repo)
 
 Current mocks are branded **"LockAccess Pro"** with the subtitle "Platform Admin" — the project name JobixFlow does not appear. Confirm which name to use before producing final UI.
 
@@ -164,7 +165,7 @@ Exact spacing, radii, and type scale are **not** reliably measurable from PNGs �
 
 ## What already exists vs. what must be designed
 
-**Exists** (`figma-current/`): Login, Reset Password (verify email + new password), Dashboard, Companies, Company Details modal, Add Company, Company Areas Management, Jobs, Reports. `Container.png` and `Primitive.div.png` are stray exported nodes, not screens.
+**Exists** (per the now-removed `figma-current/` screenshots — captured for the design system above, before deletion): Login, Reset Password (verify email + new password), Dashboard, Companies, Company Details modal, Add Company, Company Areas Management, Jobs, Reports. `Container.png` and `Primitive.div.png` were stray exported nodes, not screens.
 
 **Missing entirely** — every financial screen (platform wallet, company wallet, technician ledger/account, transactions, weekly statements, disputes, payouts), payments & payment links, gateway settings, Twilio number settings, Key Codes, Code Requests, Call Logs detail & recordings, per-job chat, the two-layer map, notifications, company-sourced job/customer creation, the reworked table-based reports, the reusable filter/table/actions component, and all empty / loading / error / permission-denied states. The technician mobile app is also absent from this screenshot set.
 
