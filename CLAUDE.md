@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **📖 [`.claude/docs/MASTER.md`](.claude/docs/MASTER.md) is the consolidated source of truth** for the JobixFlow business and this project — every actor, rule, flow, financial model, screen, contradiction, open question and live defect in one file, with a table of contents. Read it first for any question about *what the business is* or *what has been decided*. This file (CLAUDE.md) remains the guidance on *how to work here*, and the files under `.claude/rules/`, `.claude/docs/open-questions.md` and `.claude/docs/sources/` remain the authoritative living records that MASTER.md is derived from — see MASTER.md §26 for which file to update when something changes.
+
 ## What this workspace is
 
 This is **not a codebase**. There is no build, lint, or test step, and no git repo. It is a **UI/UX design workspace** for JobixFlow — a multi-tenant dispatch platform for automotive locksmith / lockout services operating in the US.

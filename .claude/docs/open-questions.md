@@ -116,9 +116,13 @@ Every `[OPEN]` marker in a BRD points at a `Q-nn` here. Nothing on this list may
 
 ---
 
-## 🟠 Q-15 · Who can issue a refund?
+## ✅ Q-15 · Who can issue a refund? *(resolved 2026-08-28)*
 
-**Partial answer — refund and dispute are now clearly distinct mechanisms, but no role/approval path is named for either.** A **refund** is informal: the customer calls with a complaint, and the company voluntarily returns money (full or partial, e.g. $10–20 out of $100) as a goodwill gesture, decided verbally with no described request form `[T2:159-163]`. A **dispute/chargeback** is bank-initiated: the customer's bank reverses the charge, the company is notified through the **payment gateway's own dispute API**, and gets a window (client estimate: 30–60 days, unconfirmed) to submit evidence — invoice, call records `[T2:165-169]`. Both must be tagged to the job as distinct states so the job's history reads correctly (`FIN-F-003`). Still open: which role actually clicks "issue refund," and whether any approval gate exists above the person who decides.
+**Original gap.** Refund and dispute are distinct mechanisms (`Q-15` background, `[T2:159-169]`), but no role/approval path was named for either — a refund is an informal goodwill gesture with no described request form, and a dispute is bank-initiated via the gateway's dispute API with an unconfirmed 30–60 day evidence window.
+
+**Answer.** *"currently let we say the company dispatcher is the one who have highest control on the job so can decide to refund or reject, the admin can only see the audit logs."* `[USER:2026-08-28]` The **Company Dispatcher** holds the decision authority for the entire post-completion financial-resolution domain: refund request *and* decision (approve full/partial, or reject), and dispute resolution (mark Settled or Lost). Both admin roles (Company Admin, Platform Admin) are **observers only** — audit-log visibility, no action buttons — regardless of `gatewayMode`. No second approver exists above the dispatcher for either track. Full workflow detail: [`job-completion-financial-resolution-model.md`](job-completion-financial-resolution-model.md) Parts C–D, G.
+
+**Still open, split off as their own entries:** the exact reason-code lists (`Q-22`, scope-relaxed for the prototype), the ledger transaction types needed for a dispute recovery/backcharge reversal (`Q-23`), and the "Lost" outcome's trigger mechanism (`Q-24`).
 
 ---
 
@@ -129,6 +133,48 @@ Every `[OPEN]` marker in a BRD points at a `Q-nn` here. Nothing on this list may
 **Why it matters.** This is a new, real fee type never named in the financial BRD — separate from the job price, the dispatch fee, and the gateway fee. It needs its own line in the payment-arithmetic model and its own transaction type in the ledger (per `FIN-F-002`, every deduction/charge is its own row).
 
 **Blocks.** The job-cancellation flow's financial tie-in, and the payment breakdown UI for any job that doesn't reach a normal completion.
+
+**Addendum (2026-08-28, partial answer, `[USER:2026-08-28]`).** *"when cancelling a job, if the reason was customer is not available or any other reason, enter a fee amount and generate [a] payment link that is sent as a message to the customer number."* A concrete mechanism now exists: the dispatcher manually enters the fee amount at cancellation time, and the system generates a payment link delivered by SMS to the customer's number — the first real design for the previously-undesigned payment-link feature. Still open: whether every cancellation reason permits this or only some ("this reason or any other reason" reads as broad, not an exhaustive gate), and whether any calculation logic exists beyond manual entry.
+
+---
+
+## 🟠 Q-22 · What are the refund request/rejection reason-code lists? *(new — 2026-08-28)*
+
+**The gap.** The designer described a refund workflow where the dispatcher picks a reason "from a list" when requesting a refund, and again picks a reason "from a list" when rejecting one — but supplied neither list `[USER:2026-08-28]`.
+
+**Why it matters.** Both are required select-field options on a UI that's otherwise fully specified (request → approve/reject, full/partial amount). Without the enum values, the picker can't be built without inventing business language, which `Rule 00 · R00-4` forbids.
+
+**Scope relaxed for the prototype (2026-08-28).** *"as this is just a prototype the dev can decide the list of reasons and also if there are other fees fields to add. here we clear the main example in the prototype as we can't design the flow for each specific reason here. same thing for any status that have reasons and fees."* `[USER:2026-08-28]` The designer explicitly authorized a dev-authored placeholder list (applies to cancellation reasons too) so the prototype isn't blocked on this. **This does not close the underlying business question** — the client still needs to supply the real list before this leaves prototype status — it only unblocks the build.
+
+**Blocks (business-list sign-off only, no longer blocks the prototype build).** [`job-completion-financial-resolution-model.md`](job-completion-financial-resolution-model.md) Part C.
+
+---
+
+## 🟠 Q-23 · What ledger transaction types cover a dispute recovery and a backcharge reversal? *(new — 2026-08-28)*
+
+**The gap.** The client's original Financial Transactions type list (`customer_payment`, `refund`, `dispute`, `gateway_fee`, `dispatch_fee`, `technician_commission`, `technician_payout`, `backcharge`, `adjustment`, `transfer_to_company`, per `NEW-REQUIREMENTS.md §3.9`) has exactly one dispute-related type and it's modeled as always-negative. The newly-clarified dispute flow needs money to flow back in on a "Settled" outcome, and any backcharge created when a dispute opens needs to be reversible when it settles — neither direction exists in the current type list `[USER:2026-08-28]`, analysis in [`job-completion-financial-resolution-model.md`](job-completion-financial-resolution-model.md) Part D.
+
+**Why it matters.** This is the single most consequential open point for the accountancy/reporting goal the designer named this session — without a defined type (or a defined reuse of `adjustment`), the Company Wallet and Financial Transactions screens can't correctly represent a settled dispute.
+
+**Blocks.** Company Wallet, Financial Transactions ledger, and the weekly Company/Technician statements' backcharge lines.
+
+---
+
+## 🟠 Q-24 · How does a dispute reach "Lost," and who marks it? *(new — 2026-08-28)*
+
+**The gap.** The designer described the dispute's automated opening and its manual "Settled" resolution in detail, but didn't address the losing outcome `[USER:2026-08-28]`. A "Lost" branch is structurally necessary (an evidence window with a deadline implies a losing case) and was already present in the prototype's earlier mock data model, but its trigger (manually marked, symmetric to Settled — or auto-detected when the evidence deadline passes with nothing submitted) and its acting role are both unconfirmed.
+
+**Why it matters.** `FIN-F-006`/`FIN-F-007` already define what happens financially once a dispute is lost (technician bears only their commission share, dispatch/gateway fees never returned) — what's missing is purely the *mechanism* that gets a dispute into that state.
+
+**Partial answer (2026-08-28).** The *role* half of this question is resolved by `Q-15`: whoever marks it, it's the Company Dispatcher, same as Settled. Only the trigger mechanism (manual mark vs. auto-detected deadline expiry) remains open.
+
+**Blocks.** [`job-completion-financial-resolution-model.md`](job-completion-financial-resolution-model.md) Part D, the Dispute detail card's action set.
+
+---
+
+## 🟡 Q-25 · Can a resolved refund or dispute cycle reopen? *(new — 2026-08-28)*
+
+Can a `rejected` (or already-`refunded`) refund cycle be reopened if the customer asks again on the same job? Can a `settled`/`lost` dispute reopen (e.g. a second chargeback attempt on the same transaction)? Neither addressed `[USER:2026-08-28]`. Lower urgency than `Q-22`–`Q-24` — affects an edge case, not the core flow.
 
 ---
 
